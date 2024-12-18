@@ -9,18 +9,17 @@ import { ScreenContent } from '~/components/ScreenContent';
 
 
 export default function Details() {
-  const { name } = useLocalSearchParams();
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
 
-  const translate = async (text:string) =>{
+  const translate = async (text: string) =>{
     const {data, error} = await supabase.functions.invoke('translate',{
-      body: JSON.stringify({name: 'Matheesha'}),
+      body: JSON.stringify({ input, from:'English', to:'Spanish'}),
     });
     console.log(error);
     console.log(data);
 
-    return 'Matheesha';
+    return data?.content || 'Something went wrong!';
   };
 
   const onTranslate = async () => {

@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
     model: "gpt-4o",
     messages: [
         { role: "system",
-          content: 'You are a translator. Your translate from ${from} to ${to}. You output only the translated text', 
+          content: `You are a translator. Your translate from ${from} to ${to}. You output only the translated text`, 
         },
         {
             role: "user",
@@ -44,8 +44,7 @@ Deno.serve(async (req) => {
     message: `Hello ${name}!`,
   }
 
-  return new Response(
-    JSON.stringify(data),
+  return new Response(JSON.stringify(data),
     { headers: { "Content-Type": "application/json" } },
   )
 })
