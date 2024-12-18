@@ -7,18 +7,21 @@ import { useState} from 'react';
 import { Container } from '~/components/Container';
 import { ScreenContent } from '~/components/ScreenContent';
 
+
 export default function Details() {
   const { name } = useLocalSearchParams();
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
 
   const translate = async (text:string) =>{
-    const {data, error} = await supabase.functions.invoke('translate');
+    const {data, error} = await supabase.functions.invoke('translate',{
+      body: JSON.stringify({name: 'Matheesha'}),
+    });
     console.log(error);
     console.log(data);
 
-    return 'translation';
-  }
+    return 'Matheesha';
+  };
 
   const onTranslate = async () => {
     const translation = await translate(input);
@@ -57,7 +60,7 @@ export default function Details() {
           <Text className="color-gray-500">{input.length} / 5000</Text>
         </View>
       </View>
-
+    
       {/*output container*/}
       {output && (
       <View className="gap-5 p-5 bg-gray-300">

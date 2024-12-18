@@ -3,12 +3,43 @@
 // This enables autocomplete, go to definition, etc.
 
 // Setup type definitions for built-in Supabase Runtime APIs
-import "jsr:@supabase/functions-js/edge-runtime.d.ts"
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import OpenAI from 'npm:openai';
 
-console.log("Hello from Functions!")
+const openai = new OpenAI();
 
+/*
 Deno.serve(async (req) => {
-  const { name } = await req.json()
+  const { name } = await req.json();
+  const data={
+      message:'Hello ${name}!',
+  };
+  }
+
+  return new Response(
+    JSON.stringify(data),
+    { headers: { "Content-Type": "application/json" } }
+  )
+)
+*/
+Deno.serve(async (req) => {
+  const { input, from, to } = await req.json();
+
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [
+        { role: "system",
+          content: 'You are a translator. Your translate from ${from} to ${to}. You output only the translated text', 
+        },
+        {
+            role: "user",
+            content: input
+        },
+    ],
+  });
+
+  console.log(completion.choices[0].message);
+
   const data = {
     message: `Hello ${name}!`,
   }
@@ -18,6 +49,14 @@ Deno.serve(async (req) => {
     { headers: { "Content-Type": "application/json" } },
   )
 })
+
+
+ 
+
+
+
+
+
 
 /* To invoke locally:
 
